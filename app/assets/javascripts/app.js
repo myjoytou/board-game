@@ -130,7 +130,7 @@ app.controller("gameCtrl", ["$scope", "websocketService", "$localStorage","$stat
     $scope.game.gameBlocked = false;
     var blockGame = function(time) {
         timer = setInterval(function() {
-            console.log('inside timer');
+            console.log('inside timer', $scope.game.blockTime);
             $scope.game.gameBlocked = true;
             if ($scope.game.blockTime <= 0){
                 clearInterval(timer);
