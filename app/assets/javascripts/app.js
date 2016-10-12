@@ -129,7 +129,6 @@ app.controller("gameCtrl", ["$scope", "websocketService", "$localStorage","$stat
     var timer;
     $scope.game.gameBlocked = false;
     var blockGame = function(time) {
-        if (angular.isDefined(timer)) return;
         timer = setInterval(function() {
             console.log('inside timer');
             $scope.game.gameBlocked = true;
@@ -165,8 +164,8 @@ app.controller("gameCtrl", ["$scope", "websocketService", "$localStorage","$stat
             // $scope.grid = $localStorage.grid;
             setGrid(data.grid);
             setPlayerStats(data.player_stats);
-            console.log('game block time: ', $scope.game.blockTime);
             setGameBlockTime();
+            console.log('game block time: ', $scope.game.blockTime);
             blockGame($scope.game.blockTime);
             $scope.$apply();
         });
@@ -181,6 +180,7 @@ app.controller("gameCtrl", ["$scope", "websocketService", "$localStorage","$stat
             console.log('starting game', data);
             if (data.status === 'failure') {
                 setServerError(data.message);
+                clearWinner();
                 $scope.$apply();
             }
             else {

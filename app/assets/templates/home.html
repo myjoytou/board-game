@@ -16,7 +16,7 @@
                 
             </div>
             <div class="col-md-12" ng-mouseover="fillSquares()" ng-mouseleave="emptySquares()">
-                <div class="col-md-{{game.cellWidth}} box square-box" ng-class="{active: !cell.occupied}" ng-style="{'background': '#{{cell.color}}'}" ng-repeat="cell in game.grid" ng-click="acquireSquare(cell)">{{ cell.id }} {{cell.occupied}}</div>
+                <div class="col-md-{{game.cellWidth}} box square-box" ng-class="{active: !cell.occupied}" ng-style="{'background': '#{{cell.color}}'}" ng-repeat="cell in game.grid" ng-click="acquireSquare(cell)"></div>
             </div>
         </div>
     </div>
