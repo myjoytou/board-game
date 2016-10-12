@@ -6,7 +6,8 @@ class GameController < BaseController
     game = Game.create_new_game(data)
     log_msg("#{game}")
     Board.create_board(data, game)
-    player = Player.create_player({color: player_color, name: data['player_name']}, game)
+    player = Player.find_by_name(data['player_name'])
+    player = Player.create_player({color: player_color, name: data['player_name']}, game) if player.blank?
     trigger_success({game_details: game, player_details: player})
   end
 
@@ -14,13 +15,20 @@ class GameController < BaseController
     validate_join_data
     game = Game.find(data['game_id'])
     player = Player.find_by_name(data['player_name'])
+    puts "============the game id is #{game.id}==================the player #{player.name} =============== the game #{game.players.map(&:name).include?(player)}" if player.present?
     if player.blank?
       player_color = assign_color
       player = Player.create_player({color: player_color, name: data['player_name']}, game)
     end
-    puts "============================== #{game.players.length}"
-    if game.players.length >= 2
-      WebsocketRails[game.channel_name.to_sym].trigger :start_game, {game_details: game, player_details: player, grid: game.board.cells}
+    if !game.players.map(&:name).include?(player.name)
+      player.assign_game(game)
+    end
+    player_stats = get_player_stats(game, player)
+    puts "============================== #{game.players.count}"
+    if game.players.count >= 2
+      WebsocketRails[game.channel_name.to_sym].trigger :start_game, {status: 'success', game_details: game, player_details: player, grid: game.board.cells, player_stats: player_stats}
+    else
+      WebsocketRails[game.channel_name.to_sym].trigger :start_game, {status: 'failure', message: "Atleast 2 players are required for starting the game!"}
     end
 
   end
@@ -32,15 +40,10 @@ class GameController < BaseController
     cell = game.board.cells.find(data['cell_id'])
 
     winner = game.play(player, cell)
-    player_stats = []
-    game.players.each do |pl|
-      temp = {}
-      temp['player_name'] = pl.name
-      temp['count'] = pl.game.board.cells.where(color: pl.color)
-      player_stats << temp
-    end
-    WebsocketRails[game.channel_name.to_sym].trigger :winner, {winner: winner}
+    player_stats = get_player_stats(game, player)
+    WebsocketRails[game.channel_name.to_sym].trigger :winner, {winner: winner} if winner.present?
     WebsocketRails[game.channel_name.to_sym].trigger :move_info, {status: 'success', grid: game.board.cells, player_stats: player_stats}
+
   end
 
   def get_active_games
@@ -48,6 +51,18 @@ class GameController < BaseController
   end
 
   private
+
+  def get_player_stats(game, player)
+    player_stats = []
+    game.players.each do |pl|
+      temp = {}
+      temp['player_name'] = pl.name
+      temp['count'] = pl.game.board.cells.where(color: pl.color).count
+      temp['color'] = pl.color;
+      player_stats << temp
+    end
+    player_stats
+  end
 
   def validate_play_data
     raise "Player id not present!" if data['player_id'].blank?
@@ -70,6 +85,7 @@ class GameController < BaseController
     raise "X dimension not provided" if data["x_dimension"].blank?
     raise "Y dimensino not provided" if data["y_dimension"].blank?
     raise "Player name not provided" if data["player_name"].blank?
+    raise "Game block time not provided!" if data['block_time'].blank?
   end
 
   def assign_color

@@ -8,20 +8,15 @@
 
 <div class="container">
     <div class="row">
-        <ui-view></ui-view>
-        <div ng-if="game.showGame">
+        <!-- <ui-view></ui-view> -->
+        <span ng-if="game.gameBlocked">Please Wait while game appears again</span>
+        <div ng-if="game.showGame && !game.errorMessage && !game.gameBlocked">
             <div class="col-md-12 text-center">
-                <h1> Board game </h1>
-                <div class="col-md-12">
-                    <div ng-repeat="stat in player_stats" class="col-md-4">
-                        <span class="col-md-3">{{ stat.player_name }}</span>
-                        <span class="col-md-1">:{{ stat.count }}</span>
-                    </div>
-                </div>
-                <h1 class="pull-right" ng-if="game.winner">{{game.winner}}</h1>
+                <li class="view-list"> Game Name: {{ game.activeGame.name | uppercase}} </li>
+                
             </div>
             <div class="col-md-12" ng-mouseover="fillSquares()" ng-mouseleave="emptySquares()">
-                <div class="col-md-{{game.divWidth}} box square-box" ng-class="{active: !cell.occupied}" ng-style="{'background': '#{{cell.color}}'}" ng-repeat="cell in grid" ng-click="acquireSquare(cell)">{{ cell.id }} {{cell.occupied}}</div>
+                <div class="col-md-{{game.cellWidth}} box square-box" ng-class="{active: !cell.occupied}" ng-style="{'background': '#{{cell.color}}'}" ng-repeat="cell in game.grid" ng-click="acquireSquare(cell)">{{ cell.id }} {{cell.occupied}}</div>
             </div>
         </div>
     </div>

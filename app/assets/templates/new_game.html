@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-3">
                 <form class="form-horizontal">
-                    <div class="form-group">
+                    <div class="form-group" ng-show="!playerPresent()">
                         <label for="playerName" class="col-sm-2 control-label">PlayerName</label>
                         <div class="col-sm-10">
                             <input type="text" ng-model="newGame['player_name']" class="form-control" id="playerName" placeholder="Player Name">
@@ -33,7 +33,12 @@
                             <input type="text" ng-model="newGame['y_dimension']" class="form-control" id="yDimension" placeholder="Y dimension">
                         </div>
                     </div>
-                    
+                    <div class="form-group">
+                        <label for="sleep" class="col-sm-2 control-label">Blocking Time(sec)</label>
+                        <div class="col-sm-10">
+                            <input type="text" ng-model="newGame['blockTime']" class="form-control" id="sleep" placeholder="5">
+                        </div>
+                    </div>
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
                             <button ng-click="createNewGame()" class="btn btn-default">Create</button>

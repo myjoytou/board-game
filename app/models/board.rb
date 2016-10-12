@@ -2,10 +2,6 @@ class Board < ActiveRecord::Base
   belongs_to :game
   has_many :cells
 
-  # def set_cell(x, y, value)
-  #   @grid[x][y].value = value
-  # end
-
   def self.create_board(params, game)
     board = Board.new
     board.game_id = game.id
@@ -13,6 +9,12 @@ class Board < ActiveRecord::Base
     board.y_dime = params["y_dimension"]
     board.save!
     board.create_cells(params, board)
+  end
+
+
+  def game_over
+    return false if cell_remaining?
+    return :winner if winner?
   end
 
   def create_cells(params, board)
@@ -23,11 +25,6 @@ class Board < ActiveRecord::Base
       cell.color = "ffffff"
       cell.save!
     end
-  end
-
-  def game_over
-    return false if cell_remaining?
-    return :winner if winner?
   end
 
   def winner?
@@ -43,6 +40,7 @@ class Board < ActiveRecord::Base
     return winning_color
   end
 
+
   private
 
   def set_winner(color)
@@ -50,26 +48,9 @@ class Board < ActiveRecord::Base
     game.winner = color;
     game.save!
   end
-
+  
   def cell_remaining?
     self.cells.where(occupied: false).any?
   end
 
-  def group_by_value(grid)
-    value_groups = {}
-    grid.each do |g_array|
-      g_array.each do |g_elem|
-        if value_groups[g_elem.value]
-          value_groups[g_elem.value] << g_elem
-        else
-          value_groups[g_elem.value] = [g_elem]
-        end
-      end
-    end
-    value_groups
-  end
-
-  def default_grid(params)
-    Array.new(params["x_dimension"].to_i) { Array.new(params["y_dimension"].to_i) {Cell.new} }
-  end
 end

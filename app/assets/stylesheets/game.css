@@ -22,3 +22,12 @@ li.view-list {
     height: 50px;
     cursor: pointer;
 }
+.inline {
+    display: inline;
+}
+.error {
+    color: red;
+}
+.color-box {
+    height: 20px
+}

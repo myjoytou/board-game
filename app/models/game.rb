@@ -9,13 +9,6 @@ class Game < ActiveRecord::Base
     Game.where(status: 'active')
   end
 
-  def get_move(human_move)
-    human_move_to_coordinates(human_move)
-  end
-
-  def game_over_message(board)
-    return "#{Player.find_by_color(board.game.winner).name} won!" if board.game_over == :winner
-  end
 
   def self.create_new_game(params)
     game = Game.new
@@ -24,36 +17,13 @@ class Game < ActiveRecord::Base
     game.dimension_x = params['x_dimension']
     game.dimension_y = params['y_dimension']
     game.status = 'active'
+    game.block_time = params['block_time']
     game.save!
+    Board.create_board(params, game)
     game
   end
 
-  # def assign_player(player)
-  #   map = PlayerToGameMap.new
-  #   map.player = player.id
-  #   map.game = self.id
-  #   map.save!
-  # end
-
-  # def set_player_to_color_map(player, color)
-  #   map = PlayerToColorMap.new
-  #   map.player_id = player.id
-  #   map.color = color
-  #   map.save!
-  # end
-
-  def get_game_by_name(game_name)
-    @@current_games.each do |game|
-      if game.name == game_name
-        return game
-      end
-    end
-  end
-
-
   def play(current_player, cell)
-    # x, y = get_move(cell_number)
-    # board.set_cell(x, y, current_player.color)
     solicit_move(current_player.color, cell)
     if self.board.game_over
       return game_over_message self.board
@@ -61,6 +31,10 @@ class Game < ActiveRecord::Base
   end
 
   private
+
+  def game_over_message(board)
+    return "#{Player.find_by_color(board.game.winner).name} won!" if board.game_over == :winner
+  end
 
   def solicit_move(color, cell)
     cell.color = color

@@ -1,4 +1,6 @@
 class Player < ActiveRecord::Base
+  validates_presence_of :name, :color
+  validates_uniqueness_of :name
   belongs_to :game
   def self.get_assigned_colors
     Player.all.select(:color)
@@ -10,5 +12,9 @@ class Player < ActiveRecord::Base
     player.name = params[:name]
     player.save!
     player
+  end
+  def assign_game(game)
+    self.game_id = game.id
+    self.save!
   end
 end

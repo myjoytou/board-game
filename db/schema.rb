@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161011142250) do
+ActiveRecord::Schema.define(version: 20161012150859) do
 
   create_table "boards", force: :cascade do |t|
     t.integer "game_id", limit: 4
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 20161011142250) do
     t.string "dimension_y",  limit: 255
     t.string "status",       limit: 255, default: "inactive"
     t.string "winner",       limit: 255
+    t.string "block_time",   limit: 255, default: "5"
   end
 
   add_index "games", ["channel_name"], name: "index_games_on_channel_name", using: :btree
