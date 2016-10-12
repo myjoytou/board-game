@@ -5,7 +5,8 @@
         <h3 class="error">{{game.errorMessage}}</h3>
       </div>
 		</div>
-		<h3 class="text-center">Welcome to the Board Game</h3>
+		<h3 class="text-center" ng-if="game.activeGame">Welcome to the {{game.activeGame}}</h3>
+		<h3 class="text-center" ng-if="!game.activeGame">Welcome to the Board Game</h3>
     <div ng-repeat="stat in game.playerStats" class="col-md-4">
         <li class="view-list">
             <span class="col-md-2">{{ stat.player_name }}:</span>
