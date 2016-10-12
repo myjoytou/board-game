@@ -181,6 +181,7 @@ app.controller("gameCtrl", ["$scope", "websocketService", "$localStorage","$stat
             if (data.status === 'failure') {
                 setServerError(data.message);
                 clearWinner();
+                clearPlayerStats();
                 $scope.$apply();
             }
             else {
