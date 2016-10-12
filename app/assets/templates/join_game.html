@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Join Game</title>
+</head>
+<body>
+    <div class="panel panel-default span12">
+        <div class="panel-heading">
+            <h3 class="panel-title">Current Games</h3>
+        </div>
+        <div class="panel-body">
+            {{game}}
+            <li ng-repeat="game in game.currentGames" class="view-list">
+                <span>{{game.name}}</span>
+                <input type="text" ng-model="game.playerName[game.id]" ng-show="game.playerNameRequired" class="col-md-offset-8 input-name" placeholder="Player Name" autofocus="true">
+                <button ng-click="joinGame(game)" class="btn btn-success btn-large pull-right">Join</button>
+            </li>
+        </div>
+    </div>
+</body>
+</html>

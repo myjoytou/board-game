@@ -13,6 +13,17 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require_tree .
+//= require bootstrap-3.3.7.min.js
+//= require angular-1.2.9.min.js
+//= require ng-storage-0.3.6.min.js
 //= require websocket_rails/main
+//= require angular-ui-router-0.3.1.min.js
+//= require websocket_rails.js
+//= require events.js
+//= require abstract_connection.js
+//= require http_connection.js
+//= require websocket_connection.js
+//= require channel.js
+//= require_tree .
+
 

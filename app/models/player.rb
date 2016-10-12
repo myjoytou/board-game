@@ -1,10 +1,14 @@
-class Player
-  attr_reader :name
-  attr_reader :color
-  @@assigned_colors = []
-  def initialize(input)
-    @color = input.fetch(:color)
-    @name = input.fetch(:name)
-    @@assigned_colors << @color
+class Player < ActiveRecord::Base
+  belongs_to :game
+  def self.get_assigned_colors
+    Player.all.select(:color)
+  end
+  def self.create_player(params, game)
+    player = Player.new
+    player.game_id = game.id
+    player.color = params[:color]
+    player.name = params[:name]
+    player.save!
+    player
   end
 end

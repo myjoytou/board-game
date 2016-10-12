@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <ui-view></ui-view>
+        <div ng-if="game.showGame">
+            <div class="col-md-12 text-center">
+                <h1> Board game </h1>
+                <div class="col-md-12">
+                    <div ng-repeat="stat in player_stats" class="col-md-4">
+                        <span class="col-md-3">{{ stat.player_name }}</span>
+                        <span class="col-md-1">:{{ stat.count }}</span>
+                    </div>
+                </div>
+                <h1 class="pull-right" ng-if="game.winner">{{game.winner}}</h1>
+            </div>
+            <div class="col-md-12" ng-mouseover="fillSquares()" ng-mouseleave="emptySquares()">
+                <div class="col-md-{{game.divWidth}} box square-box" ng-class="{active: !cell.occupied}" ng-style="{'background': '#{{cell.color}}'}" ng-repeat="cell in grid" ng-click="acquireSquare(cell)">{{ cell.id }} {{cell.occupied}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

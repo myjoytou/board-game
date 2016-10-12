@@ -23,8 +23,10 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 
-gem 'websocket-rails', github: 'moaa/websocket-rails', branch: 'threadsocket-rails'
-gem 'websocket-rails-js', github: 'websocket-rails/websocket-rails-js', branch: 'sub_protocols'
+gem 'mysql2', '~>0.3.21'
+gem 'faye-websocket', '0.10.0'
+gem 'websocket-rails', '0.7.0'
+gem 'thin'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

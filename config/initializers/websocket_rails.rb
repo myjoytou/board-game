@@ -1,4 +1,4 @@
-WebsocketRails.configure do |config|
+WebsocketRails.setup do |config|
 
   # Uncomment to override the default log level. The log level can be
   # any of the standard Logger log levels. By default it will mirror the

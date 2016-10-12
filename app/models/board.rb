@@ -1,41 +1,58 @@
-class Board
-  attr_reader :grid
-  def initialize(input = {})
-    @x_dime = input.fetch(:x_dime)
-    @y_dime = input.fetch(:y_dime)
-    @grid = input.fetch(:grid, default_grid(@x_dime, @y_dime))
+class Board < ActiveRecord::Base
+  belongs_to :game
+  has_many :cells
+
+  # def set_cell(x, y, value)
+  #   @grid[x][y].value = value
+  # end
+
+  def self.create_board(params, game)
+    board = Board.new
+    board.game_id = game.id
+    board.x_dime = params["x_dimension"]
+    board.y_dime = params["y_dimension"]
+    board.save!
+    board.create_cells(params, board)
   end
 
-  def set_cell(x, y, value)
-    @grid[x][y].value = value
+  def create_cells(params, board)
+    (board.x_dime.to_i * board.y_dime.to_i).times do |i|
+      cell = Cell.new
+      cell.board_id = board.id
+      cell.cell_no = i
+      cell.color = "ffffff"
+      cell.save!
+    end
   end
 
   def game_over
-    return false if cell_remaining?(@grid)
+    return false if cell_remaining?
     return :winner if winner?
   end
 
   def winner?
-    value_groups = group_by_value(@grid)
-    max_cell = 0
-    winning_value = 0
-    value_groups.each do |group, cell_array|
-      cell_length = cell_array.length
-      if cell_length > max_cell
-        max_cell = cell_length
-        winning_value = cell_array[0].value
+    winning_color_count = 0
+    winning_color = ""
+    self.cells.group_by(&:color).each do |key, value|
+      if value.length > winning_color_count
+        winning_color_count = value.length
+        winning_color = key
       end
     end
-    true
+    set_winner(winning_color)
+    return winning_color
   end
 
   private
 
-  def cell_remaining?(grid)
-    grid.each do |g_array|
-      return true if g_array.any_empty?
-    end
-    false
+  def set_winner(color)
+    game = self.game
+    game.winner = color;
+    game.save!
+  end
+
+  def cell_remaining?
+    self.cells.where(occupied: false).any?
   end
 
   def group_by_value(grid)
@@ -52,7 +69,7 @@ class Board
     value_groups
   end
 
-  def default_grid(x_dime, y_dime)
-    Array.new(x_dime) { Array.new(y_dime) {Cell.new} }
+  def default_grid(params)
+    Array.new(params["x_dimension"].to_i) { Array.new(params["y_dimension"].to_i) {Cell.new} }
   end
 end
