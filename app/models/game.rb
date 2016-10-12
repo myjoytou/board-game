@@ -12,7 +12,7 @@ class Game < ActiveRecord::Base
 
   def self.create_new_game(params)
     game = Game.new
-    game.name = params['game_name']
+    game.name = params['game_name'].downcase
     game.channel_name = params['game_name']
     game.dimension_x = params['x_dimension']
     game.dimension_y = params['y_dimension']

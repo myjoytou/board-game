@@ -1,23 +1,24 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
-			<div class="col-md-12">
-				<div ng-if="game.errorMessage">
-          <h3 class="error">{{game.errorMessage}}</h3>
-	      </div>
-			</div>
-			<h3 class="text-center">Welcome to the Board Game</h3>
-			<!-- <div class="col-md-12"> -->
-	    <div ng-repeat="stat in game.playerStats" class="col-md-4">
-	        <li class="view-list">
-	            <span class="col-md-2">{{ stat.player_name }}:</span>
-	            <span class="col-md-1">{{ stat.count }}</span>
-	            <span class="col-md-1 color-box" ng-style="{ 'background':'#{{stat.color}}' }"></span>
-	        </li>
-	    </div>
-			<!-- </div> -->
-			<h1 class="pull-right" ng-if="game.winner">{{game.winner}}</h1>
-			<ui-view></ui-view>
+			<div ng-if="game.errorMessage">
+        <h3 class="error">{{game.errorMessage}}</h3>
+      </div>
 		</div>
+		<h3 class="text-center">Welcome to the Board Game</h3>
+    <div ng-repeat="stat in game.playerStats" class="col-md-4">
+        <li class="view-list">
+            <span class="col-md-2">{{ stat.player_name }}:</span>
+            <span class="col-md-1">{{ stat.count }}</span>
+            <span class="col-md-1 color-box" ng-style="{ 'background':'#{{stat.color}}' }"></span>
+        </li>
+    </div>
+    <div class="col-md-4" ng-if="game.winner">
+    	<li class="view-list" >
+    		<span class="col-md-2">Winner:</span>
+    		<span class="col-md-2">{{game.winner | uppercase}}</span>
+    	</li>
+    </div>
+		<ui-view></ui-view>
 	</div>
 </div>

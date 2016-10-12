@@ -185,8 +185,9 @@ app.controller("gameCtrl", ["$scope", "websocketService", "$localStorage","$stat
             }
             else {
                 clearServerError();
-                if(data.game_details.winner) {
+                if(data.winner) {
                     clearWinner();
+                    setWinner(data.winner);
                 }   
                 clearGameBlockTime();
                 setGameBlockTime(data.game_details.block_time);

@@ -24,9 +24,13 @@ class GameController < BaseController
       player.assign_game(game)
     end
     player_stats = get_player_stats(game, player)
+    data = {status: 'success', game_details: game, player_details: player, grid: game.board.cells, player_stats: player_stats}
+    if game.winner
+      data['winner'] = Player.find_by_color(game.winner).name
+    end
     puts "============================== #{game.players.count}"
     if game.players.count >= 2
-      WebsocketRails[game.channel_name.to_sym].trigger :start_game, {status: 'success', game_details: game, player_details: player, grid: game.board.cells, player_stats: player_stats}
+      WebsocketRails[game.channel_name.to_sym].trigger :start_game, data
     else
       WebsocketRails[game.channel_name.to_sym].trigger :start_game, {status: 'failure', message: "Atleast 2 players are required for starting the game!"}
     end
