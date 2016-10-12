@@ -21,7 +21,7 @@ In the client side local storage is being used for persistence.
 
 # How to Play?
 
-	1. Go to the url(for local 'localhost:port_number')
+	1. Go to the url(for local 'localhost:port_number', for live site: 'https://agile-badlands-18690.herokuapp.com/')
 	2. Check if any game is already there by clicking on 'Join Game' and then 'Refresh list!'
 	3. For joining any game click 'Join'
 	4. Click on any of the boxes to aquire it.
